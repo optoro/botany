@@ -1,3 +1,3 @@
-module Etiquette
+module Botany
   VERSION = "0.0.1"
 end

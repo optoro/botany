@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'etiquette/version'
+require 'botany/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "etiquette"
-  spec.version       = Etiquette::VERSION
+  spec.name          = "botany"
+  spec.version       = Botany::VERSION
   spec.authors       = ["Chris Hoffman"]
   spec.email         = ["choffman@optoro.com"]
   spec.description   = "Helps you define conditions, rules and responses and build complex decision trees out of them."
-  spec.summary       = "Tell your models how to behave."
+  spec.summary       = "Abstract Classification Engine"
   spec.homepage      = ""
   spec.license       = "MIT"
 
