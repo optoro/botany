@@ -3,14 +3,14 @@ require 'botany/version'
 module Botany
   class Classifier
     def self.checks_with checks_module
-      rule_context_class.send :include, checks_module
+      subject_class.send :include, checks_module
     end
 
     def self.check name, &definition
-      rule_context_class.send :define_method, name, &definition
+      subject_class.send :define_method, name, &definition
     end
 
-    def self.rule_context_class
+    def self.subject_class
       if const_defined? :RuleContext
         const_get :RuleContext
       else
@@ -18,7 +18,7 @@ module Botany
       end
     end
 
-    def self.classify classification
+    def self.classifies classification
       (rules << Botany::Rule.new(classification)).last
     end
 
@@ -31,13 +31,13 @@ module Botany
     end
 
     def self.is_check? sym
-      @check_tester ||= rule_context_class.new({})
+      @check_tester ||= subject_class.new({})
 
       @check_tester.respond_to? sym
     end
 
-    def self.apply_to hash
-      context = rule_context_class.new hash
+    def self.classify hash
+      context = subject_class.new hash
 
       if rule = rule_for_context(context)
         rule.classification
