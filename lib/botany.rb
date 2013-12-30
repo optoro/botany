@@ -26,6 +26,10 @@ module Botany
       rules << Botany::DefaultRule.new(classification)
     end
 
+    def self.defaults_to classification
+      default_to classification
+    end
+
     def self.method_missing sym, *args, &blk
       is_check?(sym) ? CheckSet.new(sym, *args) : super
     end
