@@ -22,6 +22,10 @@ module Botany
       (rules << Botany::Rule.new(classification)).last
     end
 
+    def self.default_to classification
+      rules << Botany::DefaultRule.new(classification)
+    end
+
     def self.method_missing sym, *args, &blk
       is_check?(sym) ? CheckSet.new(sym, *args) : super
     end
@@ -68,6 +72,18 @@ module Botany
 
     def appropriate_in_context? context
       @check_set ? @check_set.appropriate_in_context?(context) : true
+    end
+  end
+
+  class DefaultRule
+    def initialize classification
+      @classification = classification
+    end
+
+    attr_reader :classification
+
+    def appropriate_in_context? context
+      true
     end
   end
 

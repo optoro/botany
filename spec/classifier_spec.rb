@@ -77,7 +77,7 @@ describe "a Classifier" do
   it "handles defaults" do
     Rules = Class.new TestRules do
       classifies(:string).when thing_behaves_like_a?(String)
-      classifies(:default)
+      default_to(:default)
     end
 
     Rules.classify({thing: 4}).must_equal :default
