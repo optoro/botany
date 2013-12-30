@@ -63,7 +63,7 @@ describe "a Classifier" do
 
     Rules.classify({thing: "foo"}).must_equal :bar
     Rules.classify({thing: "baz"}).must_equal :string
-    ->() { Rules.classify({thing: 4}) }.must_raise Botany::NoAppropriateRuleException
+    ->() { Rules.classify({thing: 4}) }.must_raise Botany::NoApplicableRuleException
   end
 
   it "handles negated rules correctly" do

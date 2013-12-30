@@ -41,23 +41,23 @@ module Botany
     end
 
     def self.classify hash
-      context = subject_class.new hash
+      subject = subject_class.new hash
 
-      if rule = rule_for_context(context)
+      if rule = rule_for_subject(subject)
         rule.classification
       else
-        raise NoAppropriateRuleException
+        raise NoApplicableRuleException
       end
     end
 
-    def self.rule_for_context context
+    def self.rule_for_subject subject
       rules.find do |rule|
-        rule.appropriate_in_context? context
+        rule.applies_to_subject? subject
       end
     end
   end
 
-  NoAppropriateRuleException = Class.new StandardError
+  NoApplicableRuleException = Class.new StandardError
 
   class Rule
     def initialize classification
@@ -70,8 +70,8 @@ module Botany
       @check_set = check_set
     end
 
-    def appropriate_in_context? context
-      @check_set ? @check_set.appropriate_in_context?(context) : true
+    def applies_to_subject? subject
+      @check_set ? @check_set.applies_to_subject?(subject) : true
     end
   end
 
@@ -82,7 +82,7 @@ module Botany
 
     attr_reader :classification
 
-    def appropriate_in_context? context
+    def applies_to_subject? subject
       true
     end
   end
@@ -90,23 +90,23 @@ module Botany
   class CheckSet
     def initialize *args
       @checks = [Check.new(*args)]
-      @invert_appropriateness = false
+      @invert_applicability = false
     end
 
-    attr_reader :checks, :invert_appropriateness
+    attr_reader :checks, :invert_applicability
 
-    def appropriate_in_context? context
-      invert_appropriateness ? false_in_context?(context) : true_in_context?(context)
+    def applies_to_subject? subject
+      invert_applicability ? false_for_subject?(subject) : true_for_subject?(subject)
     end
 
-    def true_in_context? context
+    def true_for_subject? subject
       checks.each do |check|
-        return false unless check.true_in_context?(context)
+        return false unless check.true_for_subject?(subject)
       end
     end
 
-    def false_in_context? context
-      !true_in_context?(context)
+    def false_for_subject? subject
+      !true_for_subject?(subject)
     end
 
     def & check_set
@@ -115,7 +115,7 @@ module Botany
     end
 
     def !
-      @invert_appropriateness = !invert_appropriateness
+      @invert_applicability = !invert_applicability
       self
     end
   end
@@ -127,8 +127,8 @@ module Botany
 
     attr_reader :proc
 
-    def true_in_context? context
-      context.instance_eval &proc
+    def true_for_subject? subject
+      subject.instance_eval &proc
     end
   end
 
