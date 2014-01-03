@@ -11,10 +11,10 @@ module Botany
     end
 
     def self.subject_class
-      if const_defined? :RuleContext
-        const_get :RuleContext
+      if const_defined? :RuleSubject
+        const_get :RuleSubject
       else
-        const_set :RuleContext, Class.new(Botany::Context)
+        const_set :RuleSubject, Class.new(Botany::Subject)
       end
     end
 
@@ -136,7 +136,7 @@ module Botany
     end
   end
 
-  class Context
+  class Subject
     def initialize hash
       hash.each do |key, value|
         instance_variable_set "@#{key}", value
